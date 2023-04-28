@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+  <h1>mongodb!</h1>
+  <div>用户名：<input id="username" /></div>
+  <div>密码：<input type="password" id="password"></div>
+  <div>年龄：<input type="number" id="age"></div>
+  <button id="register">注册</button>
+  <div>
+    <button id="update">更新</button>
+    <button id="delete1">删除</button>
+  </div>
+
+  <table border="1">
+    <thead>
+      <tr>
+        <td>id</td>
+        <td>用户名</td>
+        <td>年龄</td>
+      </tr>
+    </thead>
+    <tbody id="tbody">
+
+    </tbody>
+  </table>
+</body>
+<script>
+  var register = document.querySelector('#register')
+  var username = document.querySelector('#username')
+  var password = document.querySelector('#password')
+  var age = document.querySelector('#age')
+  var update = document.querySelector('#update')
+  var delete1 = document.querySelector('#delete1')
+
+  register.onclick = () => {
+    console.log(username.value, password.value, age.value);
+    fetch("/api/user/add", {
+      method: "POST",
+      body: JSON.stringify({
+        username: username.value,
+        password: password.value,
+        age: age.value
+      }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }).then(res => res.json()).then(res => {
+      console.log(res);
+    })
+  }
+
+  update.onclick = () => {
+    fetch("/api/user/update/63e89c55f5546e233a3730a5", {
+      method: "POST",
+      body: JSON.stringify({
+        username: '更新了',
+        password: "更新的密码",
+        age: 1
+      }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }).then(res => res.json()).then(res => {
+      console.log(res);
+    })
+  }
+  delete1.onclick = () => {
+    fetch("/api/user/delete/63e89c55f5546e233a3730a5",).then(res => res.json()).then(res => {
+      console.log(res);
+    })
+  }
+
+  fetch("api/user/list").then(res => res.json()).then(res => {
+    var tbody = document.querySelector('tbody')
+    tbody.innerHTML = res.map(item => `
+      <tr>
+        <td>${item._id}</td>
+        <td>${item.username}</td>
+        <td>${item.age}</td>
+       </tr> 
+    `).join('')
+    console.log(res);
+  })
+</script>
+
+</html>
