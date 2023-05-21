@@ -18,7 +18,24 @@ var router = express.Router();
 router.get('/', function (req, res, next) {
   res.send({ name: "123" });
 });
+router.get('/user/all', (req, res) => {
+  UserModel.find().then(data => {
+    if (data) {
+      res.send(data)
+    }
+  })
+});
 
+router.post('/login', async (req, res) => {
+  const { username, password } = req.body
+  const user = await UserModel.findOne({ username: username })
+  if (user) {
+    req.session.user = user
+    res.status(200).json({ code: 200, message: '登录成功' });
+  } else {
+    res.status(404).json({ code: 404, error: '用户名不存在' });
+  }
+})
 router.post("/user/add", (req, res) => {
   console.log(req.body);
   const { username, password, age } = req.body

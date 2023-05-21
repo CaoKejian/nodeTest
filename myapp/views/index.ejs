@@ -13,10 +13,10 @@
   <div>用户名：<input id="username" /></div>
   <div>密码：<input type="password" id="password"></div>
   <div>年龄：<input type="number" id="age"></div>
-  <button id="register">注册</button>
+  <button id="register">添加用户</button>
   <div>
-    <button id="update">更新</button>
-    <button id="delete1">删除</button>
+    <button id="update">更新用户</button>
+    <button id="delete1">删除用户</button>
   </div>
 
   <table border="1">
@@ -78,13 +78,13 @@
     })
   }
 
-  fetch("api/user/list").then(res => res.json()).then(res => {
+  fetch("api/user/all").then(res => res.json()).then(res => {
     var tbody = document.querySelector('tbody')
     tbody.innerHTML = res.map(item => `
       <tr>
         <td>${item._id}</td>
         <td>${item.username}</td>
-        <td>${item.age}</td>
+        <td>${item.password}</td>
        </tr> 
     `).join('')
     console.log(res);
